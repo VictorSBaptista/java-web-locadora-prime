@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="corpo">
+		<div align="center">
+			<p:panel  rendered="#{loginBacking.user}" style="height: 490px;">
+				<h:graphicImage name="images/filmeBackgroundUser.gif"
+				library="adamantium-layout" style="margin-top: -8px; margin-left: -20px; height: 490px; width: 1368px;"> 
+				<p:linkButton outcome="cad-cliente" value="Cadastrar Cliente" style="position: absolute;margin-top: 140px;margin-left: 350px;width: 200px;"/>
+				<p:linkButton outcome="efetua-locacao" value="Efetuar Locação" style="position: absolute;margin-top: 220px; margin-left: 350px;width: 200px;"/>
+				<p:linkButton outcome="list-filme" value="Consultar Filmes" style="position: absolute;margin-top: 300px; margin-left: 350px;width: 200px;"/>
+				<p:linkButton outcome="list-cliente" value="Consultar Clientes" style="position: absolute;margin-top: 140px; margin-left: 750px;width: 200px;"/>
+				<p:linkButton outcome="efetua-devolucao" value="Efetuar Devolução" style="position: absolute;margin-top: 220px; margin-left: 750px;width: 200px;"/>
+				<p:linkButton outcome="list-locacao" value="Consultar Locações" style="position: absolute;margin-top: 300px; margin-left: 750px;width: 200px;"/>
+    			</h:graphicImage>
+			</p:panel>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="corpo">
+		<title>Efetua Devolução</title>
+
+		<h:form id="formEfetuaDevolucao">
+
+			<p:growl id="growl" showDetail="true" life="4000" />
+			<div align="center">
+			<p:tabView>
+
+				<p:tab id="efetuaDevolucao" title="Efetua Devolução">
+
+					<p:panel id="pnDevolucao">
+
+						<p:panelGrid columns="2" style="width:474px;">
+
+							<p:outputLabel value="Locações:" style="margin-right:3px;"/>
+							<p:selectOneMenu value="#{devolucaoBacking.locacaoIndice}" filter="true">
+								<f:selectItem itemValue="" itemLabel=" -Selecione Locação- " />
+								<f:selectItems value="#{devolucaoBacking.listaLocacaos}"
+												var="locacao" itemLabel="#{locacao.idLocacao} - #{locacao.clienteIdCliente.nome} - #{locacao.dataLocacao}"
+												itemValue="#{locacao.idLocacao}"/>
+							</p:selectOneMenu>
+						</p:panelGrid>
+						<p:panelGrid columns="1">
+							<p:commandButton id="btnDevolucao" value="Carregar Locação Selecionada"
+								action="#{devolucaoBacking.carregaDadosLocacao}" update="@form" style="width:450px;" />
+						</p:panelGrid>
+						<p:panelGrid columns="2" style="width:474px;">
+
+							<p:outputLabel value="Nome do Cliente:" />
+							<p:inputText value="#{devolucaoBacking.locacao.clienteIdCliente.nome}" disabled="true" />
+							<p:outputLabel value="Data de Locação:" />
+							<p:calendar id="button1" value="#{devolucaoBacking.locacao.dataLocacao}" pattern="dd/MM/yyyy" disabled="true" size="37" />
+							<p:outputLabel value="Data de Devolução:" />
+							<p:calendar id="button2" value="#{devolucaoBacking.locacao.dataDevolucao}" pattern="dd/MM/yyyy" disabled="true" size="37" />
+							<p:outputLabel value="Data Atual:" />
+							<p:calendar id="button3" value="#{devolucaoBacking.dataAtual}" pattern="dd/MM/yyyy" size="37" disabled="true"/>
+						</p:panelGrid>
+
+						<p:panelGrid columns="1" style="text-align:center;">
+							<p:outputLabel value="Filmes Locados"  />
+							<p:dataTable id="tabelaDevolucao" value="#{devolucaoBacking.locacao.locacaoFilmeList}" var="filme"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+															  {PreviousPageLink} {PageLinks}
+															  {NextPageLink} {LastPageLink}
+															  {RowsPerPageDropdown}"
+								paginator="true" rows="5" lazy="true"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="Nenhum registro encontrado!"
+								rowKey="#{filme.filmeIdFilme.idFilme}"
+								disabledSelection="true">
+
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Código" />
+									</f:facet>
+									<h:outputText value="#{filme.filmeIdFilme.idFilme}" />
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Nome" />
+									</f:facet>
+									<h:outputText value="#{filme.filmeIdFilme.nome}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</p:panelGrid>
+						<p:panelGrid columns="3">
+							<p:commandButton id="btnSalvar" value="Efetuar Devolução" action="#{devolucaoBacking.efetuaDevolucao}"
+								update="@form" style="width:200px;" disabled="#{devolucaoBacking.bloq}"/>
+							<p:commandButton id="btnCancelar" value="Cancelar" action="#{devolucaoBacking.cancelar}"
+								update="@form" style="width:200px;" disabled="#{devolucaoBacking.bloq}"/>
+							<p:commandButton id="btnSair" value="Sair" action="#{devolucaoBacking.sair}"
+								update="@form" style="width:200px;"/>
+						</p:panelGrid>
+
+					</p:panel>
+
+					<p:blockUI block="pnDevolucao" trigger="btnSalvar" />
+
+				</p:tab>
+
+			</p:tabView>
+		</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

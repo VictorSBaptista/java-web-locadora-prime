@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Sistema - Locadora</title>
+</h:head>
+
+<h:body styleClass="dark">
+	<h:form id="formularioLogin">
+
+		<p:growl id="growl" showDetail="true" life="4000" />
+
+		<div align="center">
+
+			<h:graphicImage name="images/filmebackground01.gif"
+				library="adamantium-layout" style="margin-top: -16px; margin-left: -16px; height: 656px; width: 1357px;">
+
+			<p:commandButton id="imageBtn" value="Entrar" type="button" style="position: absolute; margin-top: 30px; margin-left: 1150px; width: 150px;height: 40px;"/>
+			<p:overlayPanel id="imagePanel" for="imageBtn" hideEffect="fade">
+				<h:panelGrid  id="loginPanel" columns="2" cellpadding="10">
+
+						<p:outputLabel value="Login:" />
+						<p:inputText value="#{loginBacking.login}" required="true"
+							requiredMessage="Login Obrigatório!">
+							<p:ajax event="focus" />
+						</p:inputText>
+
+						<p:outputLabel value="Senha:" />
+						<p:password id="non-feedback" value="#{loginBacking.senha}"
+							required="true"
+							requiredMessage="Senha Obrigatória!">
+							<p:ajax event="focus" />
+						</p:password>
+
+					</h:panelGrid>
+
+					<p:commandButton id="btnLogin" value="Login"
+						action="#{loginBacking.efetuarLogin}" update="@form" />
+			</p:overlayPanel>
+			<p:blockUI block="loginPanel, btnLogin" trigger="btnLogin" />
+			</h:graphicImage>
+		</div>
+	</h:form>
+</h:body>
+</html>

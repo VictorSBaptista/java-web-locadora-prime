@@ -1,0 +1,375 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="corpo">
+		<title>Consulta de Locações</title>
+
+		<h:form id="listLocacao">
+
+			<p:growl id="growl" showDetail="true" life="4000" />
+			<div align="center">
+			<p:tabView>
+
+				<p:tab id="ltLocacaoAnd" title="Locações Em Andamento">
+
+					<p:panel id="LocacacoesAnd">
+						
+						<h:panelGrid columns="3">
+							<h:outputLabel value="Pesquisar por Cliente:" />
+							<p:inputText value="#{devolucaoBacking.nomePesquisar}" size="80" placeholder="Fulano de Tal"/>
+							<p:commandButton id="btnPesquisar1" value="Pesquisar"
+								action="#{devolucaoBacking.pesquisarPorNomeCliente}" update="@form"/>
+						</h:panelGrid>
+
+						<h:panelGrid columns="1">
+
+							<p:dataTable id="tabelaLocacoesAnd"
+								value="#{devolucaoBacking.listaLocacaos}" var="locacao"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+															  {PreviousPageLink} {PageLinks}
+															  {NextPageLink} {LastPageLink}
+															  {RowsPerPageDropdown} {Exporters}"
+								paginator="true" rows="5" lazy="true"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="Nenhum registro encontrado!"
+								rowKey="" selectionMode="single"
+								disabledSelection="true">
+
+								<f:facet name="{Exporters}">
+
+									<div style="float: right; padding-top: 5px;">
+
+										<h:commandLink id="excel">
+											<p:graphicImage name="/demo/images/excel.png" />
+											<p:dataExporter type="xls" target="tabelaLocacoesAnd"
+												fileName="listaLocacoesAnd" />
+										</h:commandLink>
+
+										<h:commandLink>
+											<p:graphicImage name="/demo/images/xlsx.png" width="24" />
+											<p:dataExporter type="xlsxstream" target="tabelaLocacoesAnd"
+												fileName="listaLocacoesAnd" />
+										</h:commandLink>
+
+										<h:commandLink id="pdf">
+											<p:graphicImage name="/demo/images/pdf.png" />
+											<p:dataExporter type="pdf" target="tabelaLocacoesAnd"
+												fileName="listaLocacoesAnd" />
+										</h:commandLink>
+
+										<h:commandLink id="csv">
+											<p:graphicImage name="/demo/images/csv.png" />
+											<p:dataExporter type="csv" target="tabelaLocacoesAnd"
+												fileName="listaLocacoesAnd" />
+										</h:commandLink>
+
+										<h:commandLink id="xml">
+											<p:graphicImage name="/demo/images/xml.png" />
+											<p:dataExporter type="xml" target="tabelaLocacoesAnd"
+												fileName="listaLocacoesAnd" />
+										</h:commandLink>
+									</div>
+
+								</f:facet>
+								
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column rowspan="2" headerText="Código Locação"/>
+										<p:column colspan="2" headerText="Funcionário Responsável"/>
+										<p:column colspan="2" headerText="Cliente"/>
+										<p:column colspan="2" headerText="Datas"/>
+										<p:column rowspan="2" headerText="Filmes Locados"/>
+									</p:row>
+									<p:row>
+										<p:column headerText="Código Funcionário"/>
+										<p:column headerText="Nome Funcionário"/>
+										<p:column headerText="CPF Cliente"/>
+										<p:column headerText="Nome Cliente"/>
+										<p:column headerText="Data Locação"/>
+										<p:column headerText="Data Devolução"/>
+									</p:row>
+									
+								</p:columnGroup>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.idLocacao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.funcionarioIdFuncionario.idFuncionario}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.funcionarioIdFuncionario.nome}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.clienteIdCliente.cpf}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.clienteIdCliente.nome}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.dataLocacao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.dataDevolucao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<p:commandButton value="Filmes Locados" update="@form" id="filmesLoc1" oncomplete="PF('filmeOP1').show('#{component.clientId}')" >
+										<f:setPropertyActionListener value="#{locacao}" target="#{devolucaoBacking.locacaoSelec}" />
+									</p:commandButton>
+								</p:column>
+								
+							</p:dataTable>
+							<p:overlayPanel id="filmePanel1" widgetVar="filmeOP1" hideEffect="fade" dynamic="true" style="width:600px" showCloseIcon="true" showEffect="fade">
+								<p:dataTable id="tabelaFilmes1" value="#{devolucaoBacking.locacaoSelec.locacaoFilmeList}" var="filme"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+																  {PreviousPageLink} {PageLinks}
+																  {NextPageLink} {LastPageLink}
+																  {RowsPerPageDropdown}"
+									paginator="true" rows="5" lazy="true"
+									rowsPerPageTemplate="5,10,15"
+									emptyMessage="Nenhum registro encontrado!"
+									rowKey="#{filme.filmeIdFilme.idFilme}"
+									disabledSelection="true">
+	
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Código" />
+										</f:facet>
+										<h:outputText value="#{filme.filmeIdFilme.idFilme}" />
+									</p:column>
+	
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Nome" />
+										</f:facet>
+										<h:outputText value="#{filme.filmeIdFilme.nome}" />
+									</p:column>
+	
+								</p:dataTable>
+							</p:overlayPanel>
+						</h:panelGrid>
+						<p:panelGrid columns="3">
+							<p:commandButton id="btnSair1" value="Sair" action="#{devolucaoBacking.sair}" update="@form"/>
+						</p:panelGrid>
+					</p:panel>
+
+
+				</p:tab>
+				
+				<p:tab id="ltLocacao" title="Locações Efetuadas">
+
+					<p:panel id="Locacacoes">
+						<h:panelGrid columns="3">
+							<h:outputLabel value="Pesquisar por Cliente:" />
+							<p:inputText value="#{devolucaoBacking.nomePesquisar}" size="80" placeholder="Fulano de Tal"/>
+							<p:commandButton id="btnPesquisar" value="Pesquisar"
+								action="#{devolucaoBacking.pesquisarPorNomeCliente}" update="@form"/>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="1">
+
+							<p:dataTable id="tabelaLocacoes"
+								value="#{devolucaoBacking.listaTodasLocacaos}" var="locacao"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+															  {PreviousPageLink} {PageLinks}
+															  {NextPageLink} {LastPageLink}
+															  {RowsPerPageDropdown} {Exporters}"
+								paginator="true" rows="5" lazy="true"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="Nenhum registro encontrado!"
+								rowKey="" selectionMode="single"
+								disabledSelection="true">
+
+								<f:facet name="{Exporters}">
+
+									<div style="float: right; padding-top: 5px;">
+
+										<h:commandLink id="excel">
+											<p:graphicImage name="/demo/images/excel.png" />
+											<p:dataExporter type="xls" target="tabelaLocacoes"
+												fileName="listaLocacoes" />
+										</h:commandLink>
+
+										<h:commandLink>
+											<p:graphicImage name="/demo/images/xlsx.png" width="24" />
+											<p:dataExporter type="xlsxstream" target="tabelaLocacoes"
+												fileName="listaLocacoes" />
+										</h:commandLink>
+
+										<h:commandLink id="pdf">
+											<p:graphicImage name="/demo/images/pdf.png" />
+											<p:dataExporter type="pdf" target="tabelaLocacoes"
+												fileName="listaLocacoes" />
+										</h:commandLink>
+
+										<h:commandLink id="csv">
+											<p:graphicImage name="/demo/images/csv.png" />
+											<p:dataExporter type="csv" target="tabelaLocacoes"
+												fileName="listaLocacoes" />
+										</h:commandLink>
+
+										<h:commandLink id="xml">
+											<p:graphicImage name="/demo/images/xml.png" />
+											<p:dataExporter type="xml" target="tabelaLocacoes"
+												fileName="listaLocacoes" />
+										</h:commandLink>
+									</div>
+
+								</f:facet>
+								
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column rowspan="2" headerText="Código Locação"/>
+										<p:column colspan="2" headerText="Funcionário Responsável"/>
+										<p:column colspan="2" headerText="Cliente"/>
+										<p:column colspan="2" headerText="Datas"/>
+										<p:column rowspan="2" headerText="Filmes Locados"/>
+									</p:row>
+									<p:row>
+										<p:column headerText="Código Funcionário"/>
+										<p:column headerText="Nome Funcionário"/>
+										<p:column headerText="CPF Cliente"/>
+										<p:column headerText="Nome Cliente" /> 
+										<p:column headerText="Data Locação"/>
+										<p:column headerText="Data Devolução"/>
+									</p:row>
+									
+								</p:columnGroup>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.idLocacao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.funcionarioIdFuncionario.idFuncionario}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.funcionarioIdFuncionario.nome}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.clienteIdCliente.cpf}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.clienteIdCliente.nome}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.dataLocacao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<h:outputText value="#{locacao.dataDevolucao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header"> 
+									
+									</f:facet>
+									<p:commandButton value="Filmes Locados" update="@form" id="filmesLoc" oncomplete="PF('filmeOP').show('#{component.clientId}')" >
+										<f:setPropertyActionListener value="#{locacao}" target="#{devolucaoBacking.locacaoSelec}" />
+									</p:commandButton>
+								</p:column>
+								
+							</p:dataTable>
+							
+							<p:overlayPanel id="filmePanel" widgetVar="filmeOP" hideEffect="fade" dynamic="true" style="width:600px" showCloseIcon="true" showEffect="fade">
+								<p:dataTable id="tabelaFilmes" value="#{devolucaoBacking.locacaoSelec.locacaoFilmeList}" var="filme"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+																  {PreviousPageLink} {PageLinks}
+																  {NextPageLink} {LastPageLink}
+																  {RowsPerPageDropdown}"
+									paginator="true" rows="5" lazy="true"
+									rowsPerPageTemplate="5,10,15"
+									emptyMessage="Nenhum registro encontrado!"
+									rowKey="#{filme.filmeIdFilme.idFilme}"
+									disabledSelection="true">
+	
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Código" />
+										</f:facet>
+										<h:outputText value="#{filme.filmeIdFilme.idFilme}" />
+									</p:column>
+	
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Nome" />
+										</f:facet>
+										<h:outputText value="#{filme.filmeIdFilme.nome}" />
+									</p:column>
+	
+								</p:dataTable>
+							</p:overlayPanel>
+						</h:panelGrid>
+						<p:panelGrid columns="3">
+							<p:commandButton id="btnSair2" value="Sair" action="#{devolucaoBacking.sair}" update="@form"/>
+						</p:panelGrid>
+					</p:panel>
+
+
+				</p:tab>
+			</p:tabView>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
